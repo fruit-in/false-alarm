@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AlarmActivity">
+
+    <TextView
+        android:id="@+id/false_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:gravity="bottom|center_horizontal"
+        android:textColor="#ff0000"
+        android:textSize="120sp"
+        tools:text="24:60" />
+
+    <Button
+        android:id="@+id/wake_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="170dp"
+        android:layout_marginHorizontal="50dp"
+        android:textSize="40sp"
+        android:text="I am awake."
+        android:textAllCaps="false" />
+
+</LinearLayout>

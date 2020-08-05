@@ -3,6 +3,9 @@
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
     <string name="stop">STOP</string>
-    <string name="off">OFF</string>
-    <string name="on">ON</string>
+    <string name="alarm_off">Alarm OFF</string>
+    <string name="alarm_on">Alarm On</string>
+    <string name="vibrate_off">Vibrate OFF</string>
+    <string name="vibrate_on">Vibrate ON</string>
+    <string name="ringtone">Ringtone</string>
 </resources>

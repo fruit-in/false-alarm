@@ -1,44 +1,65 @@
 package com.example.falsealarm
 
-import android.app.AlarmManager
-import android.app.AlertDialog
-import android.app.PendingIntent
-import android.app.TimePickerDialog
+import android.app.*
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import android.widget.ToggleButton
-import androidx.appcompat.app.AppCompatActivity
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
+    private lateinit var alarmSwitch: ToggleButton
+    private lateinit var vibrateSwitch: ToggleButton
+    private lateinit var ringtoneSelect: Button
     private lateinit var startTime: TextView
     private lateinit var endTime: TextView
-    private lateinit var alarmSwitch: ToggleButton
-    private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var alarmManager: AlarmManager
     private lateinit var calendar: Calendar
-    private var startHour = 0
-    private var startMin = 0
-    private var endHour = 0
-    private var endMin = 0
+    private lateinit var preferences: Preferences
+    private lateinit var alarmManager: AlarmManager
+    private lateinit var pendingIntent: PendingIntent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        init()
+        alarmSwitch = findViewById(R.id.alarm_switch)
+        vibrateSwitch = findViewById(R.id.vibrate_switch)
+        ringtoneSelect = findViewById(R.id.ringtone)
+        startTime = findViewById(R.id.start_time)
+        endTime = findViewById(R.id.end_time)
+
+        calendar = Calendar.getInstance()
+        calendar.set(Calendar.SECOND, 0)
+
+        alarmManagerInit()
+        loadPreferences()
+        listenersInit()
+
+        startTime.isClickable = alarmSwitch.isChecked
+        endTime.isClickable = alarmSwitch.isChecked
     }
 
-    private fun init() {
-        alarmSwitch = findViewById(R.id.alarm_switch)
+    override fun onResume() {
+        super.onResume()
 
+        if (preferences.alarmOn) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        preferences.ringtone = data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+    }
+
+    private fun alarmManagerInit() {
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent("alarm_event")
         if (Build.VERSION.SDK_INT >= 26) {
@@ -46,96 +67,72 @@ class MainActivity : AppCompatActivity() {
                 ComponentName(applicationContext, "com.example.falsealarm.AlarmReceiver")
         }
         pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+    }
 
-        timeInit()
-
+    private fun listenersInit() {
         alarmSwitch.setOnCheckedChangeListener { _, b ->
+            preferences.alarmOn = b
             startTime.isClickable = b
             endTime.isClickable = b
-            val editor = sharedPreferences.edit()
-            editor.putBoolean("alarm_on", alarmSwitch.isChecked)
-            editor.apply()
             if (b) {
                 alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
             } else {
                 alarmManager.cancel(pendingIntent)
             }
         }
+        vibrateSwitch.setOnCheckedChangeListener { _, b ->
+            preferences.vibrateOn = b
+        }
+        ringtoneSelect.setOnClickListener {
+            val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+            startActivityForResult(intent, 0)
+        }
         startTime.setOnClickListener {
             TimePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, OnTimeSetListener { _, i, i2 ->
-                startHour = i
-                startMin = i2
-                startTime.text = String.format("%02d:%02d", startHour, startMin)
-                savePreferences()
-            }, startHour, startMin, true).show()
+                preferences.startHour = i
+                preferences.startMin = i2
+                startTime.text =
+                    String.format("%02d:%02d", preferences.startHour, preferences.startMin)
+            }, preferences.startHour, preferences.startMin, true).show()
         }
         endTime.setOnClickListener {
             TimePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, OnTimeSetListener { _, i, i2 ->
-                endHour = i
-                endMin = i2
-                endTime.text = String.format("%02d:%02d", endHour, endMin)
-                savePreferences()
-            }, endHour, endMin, true).show()
-        }
-
-        startTime.isClickable = alarmSwitch.isChecked
-        endTime.isClickable = alarmSwitch.isChecked
-    }
-
-    private fun timeInit() {
-        startTime = findViewById(R.id.start_time)
-        endTime = findViewById(R.id.end_time)
-
-        sharedPreferences = getSharedPreferences("fa_time", MODE_PRIVATE)
-        loadPreferences()
-
-        calendar = Calendar.getInstance()
-        calendar.set(Calendar.SECOND, 0)
-
-        savePreferences()
-    }
-
-    private fun savePreferences() {
-        val editor = sharedPreferences.edit()
-
-        editor.putBoolean("alarm_on", alarmSwitch.isChecked)
-        editor.putInt("start_hour", startHour)
-        editor.putInt("start_min", startMin)
-        editor.putInt("end_hour", endHour)
-        editor.putInt("end_min", endMin)
-        editor.apply()
-
-        if (alarmSwitch.isChecked) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+                preferences.endHour = i
+                preferences.endMin = i2
+                endTime.text = String.format("%02d:%02d", preferences.endHour, preferences.endMin)
+            }, preferences.endHour, preferences.endMin, true).show()
         }
     }
 
     private fun loadPreferences() {
-        alarmSwitch.isChecked = sharedPreferences.getBoolean("alarm_on", false)
-        startHour = sharedPreferences.getInt("start_hour", 0)
-        startMin = sharedPreferences.getInt("start_min", 0)
-        endHour = sharedPreferences.getInt("end_hour", 0)
-        endMin = sharedPreferences.getInt("end_min", 0)
+        preferences = Preferences(this)
 
-        startTime.text = String.format("%02d:%02d", startHour, startMin)
-        endTime.text = String.format("%02d:%02d", endHour, endMin)
+        alarmSwitch.isChecked = preferences.alarmOn
+        vibrateSwitch.isChecked = preferences.vibrateOn
+        startTime.text = String.format("%02d:%02d", preferences.startHour, preferences.startMin)
+        endTime.text = String.format("%02d:%02d", preferences.endHour, preferences.endMin)
+
+        if (preferences.alarmOn) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+        }
     }
 
     private fun getRandomTime(): Long {
         val currentTime = System.currentTimeMillis()
 
-        calendar.set(Calendar.HOUR_OF_DAY, startHour)
-        calendar.set(Calendar.MINUTE, startMin)
+        calendar.set(Calendar.HOUR_OF_DAY, preferences.startHour)
+        calendar.set(Calendar.MINUTE, preferences.startMin)
         while (calendar.timeInMillis >= currentTime) {
-            calendar.set(Calendar.HOUR_OF_DAY, startHour - 24)
+            calendar.set(Calendar.HOUR_OF_DAY, preferences.startHour - 24)
         }
-        calendar.set(Calendar.HOUR_OF_DAY, startHour + 24)
+        calendar.set(Calendar.HOUR_OF_DAY, preferences.startHour + 24)
         val startTime = calendar.timeInMillis
 
-        calendar.set(Calendar.HOUR_OF_DAY, endHour)
-        calendar.set(Calendar.MINUTE, endMin)
+        calendar.set(Calendar.HOUR_OF_DAY, preferences.endHour)
+        calendar.set(Calendar.MINUTE, preferences.endMin)
         if (calendar.timeInMillis < startTime) {
-            calendar.set(Calendar.HOUR_OF_DAY, endHour + 24)
+            calendar.set(Calendar.HOUR_OF_DAY, preferences.endHour + 24)
         }
         val endTime = calendar.timeInMillis
 

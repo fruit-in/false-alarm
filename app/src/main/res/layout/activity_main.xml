@@ -1,72 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:layout_marginVertical="100dp"
-tools:context=".MainActivity">
-
-    <ToggleButton
-        android:id="@+id/alarm_switch"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginHorizontal="100dp"
-        android:layout_marginVertical="30dp"
-        android:textOff="@string/off"
-        android:textOn="@string/on" />
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginVertical="100dp"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:layout_marginHorizontal="30dp"
-    android:orientation="horizontal">
-
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:text="@string/start_time" />
-
-    <TextView
-        android:id="@+id/start_time"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="30dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textSize="40sp"
-        android:clickable="true"
-        tools:text="24:60" />
-</LinearLayout>
+        android:orientation="horizontal">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="1"
-    android:layout_marginHorizontal="30dp"
-    android:orientation="horizontal">
+        <ToggleButton
+            android:id="@+id/alarm_switch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textOff="@string/alarm_off"
+            android:textOn="@string/alarm_on" />
 
-    <TextView
+        <ToggleButton
+            android:id="@+id/vibrate_switch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textOff="@string/vibrate_off"
+            android:textOn="@string/vibrate_on" />
+
+        <Button
+            android:id="@+id/ringtone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/ringtone" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:text="@string/end_time" />
-
-    <TextView
-        android:id="@+id/end_time"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_marginHorizontal="30dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:textSize="40sp"
-        android:clickable="true"
-        tools:text="24:60" />
-</LinearLayout>
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="@string/start_time"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="40sp"
+            tools:text="24:60" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="30dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="@string/end_time"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/end_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="40sp"
+            tools:text="24:60" />
+    </LinearLayout>
 
 </LinearLayout>

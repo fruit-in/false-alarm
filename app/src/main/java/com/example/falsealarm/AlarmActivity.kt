@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
+import android.os.Vibrator
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
@@ -17,6 +18,7 @@ class AlarmActivity : AppCompatActivity() {
     private lateinit var textView: TextView
     private lateinit var button: Button
     private lateinit var ringtone: Uri
+    private lateinit var vibrator: Vibrator
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var wakeLock: PowerManager.WakeLock
 
@@ -49,6 +51,9 @@ class AlarmActivity : AppCompatActivity() {
         button = findViewById(R.id.wake_up)
         button.setOnClickListener { finish() }
 
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        vibrator.vibrate(longArrayOf(100, 200, 100, 200), 0)
+
         ringtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         mediaPlayer = MediaPlayer.create(this, ringtone)
         mediaPlayer.setVolume(1.0f, 1.0f)
@@ -62,6 +67,7 @@ class AlarmActivity : AppCompatActivity() {
         if (mediaPlayer.isPlaying) {
             mediaPlayer.stop()
         }
+        vibrator.cancel()
         mediaPlayer.release()
         wakeLock.release()
     }

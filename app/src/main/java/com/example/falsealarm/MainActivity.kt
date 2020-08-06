@@ -94,6 +94,7 @@ class MainActivity : Activity() {
                 preferences.startMin = i2
                 startTime.text =
                     String.format("%02d:%02d", preferences.startHour, preferences.startMin)
+                alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
             }, preferences.startHour, preferences.startMin, true).show()
         }
         endTime.setOnClickListener {
@@ -101,6 +102,7 @@ class MainActivity : Activity() {
                 preferences.endHour = i
                 preferences.endMin = i2
                 endTime.text = String.format("%02d:%02d", preferences.endHour, preferences.endMin)
+                alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
             }, preferences.endHour, preferences.endMin, true).show()
         }
     }

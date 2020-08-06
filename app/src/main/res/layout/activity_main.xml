@@ -3,54 +3,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginVertical="100dp"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:orientation="vertical">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginVertical="30dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="1">
 
         <ToggleButton
             android:id="@+id/alarm_switch"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textOff="@string/alarm_off"
-            android:textOn="@string/alarm_on" />
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:textOff=""
+            android:textOn=""
+            android:background="@drawable/ic_alarm_off_gray_48dp" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="wrap_content" />
 
         <ToggleButton
             android:id="@+id/vibrate_switch"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textOff="@string/vibrate_off"
-            android:textOn="@string/vibrate_on" />
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:textOff=""
+            android:textOn=""
+            android:background="@drawable/ic_vibration_off_gray_48dp" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/ringtone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/ringtone" />
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:background="@drawable/ic_ringtone_select_red_48dp" />
+
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/start_row"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="30dp"
+        android:orientation="horizontal"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:gravity="center"
+            android:gravity="center_vertical|end"
             android:text="@string/start_time"
             android:textSize="20sp" />
 
@@ -60,22 +72,24 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="40sp"
+            android:textSize="60sp"
             tools:text="24:60" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/end_row"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="30dp"
+        android:orientation="horizontal"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:gravity="center"
+            android:gravity="center_vertical|end"
             android:text="@string/end_time"
             android:textSize="20sp" />
 
@@ -85,8 +99,14 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="40sp"
+            android:textSize="60sp"
             tools:text="24:60" />
+
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </LinearLayout>

@@ -6,27 +6,39 @@
     android:orientation="vertical"
     tools:context=".AlarmActivity">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
     <TextView
         android:id="@+id/false_time"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
         android:gravity="bottom|center_horizontal"
-        android:textColor="#ff0000"
+        android:textColor="#FF0000"
         android:textSize="120sp"
-        tools:text="24:60" />
+        tools:text="21:60" />
 
     <Button
         android:id="@+id/wake_up"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="170dp"
-        android:layout_marginHorizontal="50dp"
-        android:textSize="40sp"
-        android:text="@string/stop"
-        android:textAllCaps="false" />
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/bg_button"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:typeface="monospace"
+        android:text="@string/stop" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </LinearLayout>

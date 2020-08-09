@@ -8,8 +8,12 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.ToggleButton
 import java.util.*
 
 class MainActivity : Activity() {
@@ -44,9 +48,11 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
 
-        if (preferences.alarmOn) {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
-        }
+        Handler().postDelayed({
+            if (preferences.alarmOn) {
+                setAlarm()
+            }
+        }, 2333)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,7 +83,7 @@ class MainActivity : Activity() {
             alarmSwitch.setBackgroundResource(R.drawable.ic_alarm_on_blue_48dp)
             startRow.visibility = View.VISIBLE
             endRow.visibility = View.VISIBLE
-            alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+            setAlarm()
         } else {
             alarmSwitch.setBackgroundResource(R.drawable.ic_alarm_off_gray_48dp)
             startRow.visibility = View.GONE
@@ -97,7 +103,7 @@ class MainActivity : Activity() {
                 startRow.visibility = View.VISIBLE
                 endRow.visibility = View.VISIBLE
                 alarmSwitch.setBackgroundResource(R.drawable.ic_alarm_on_blue_48dp)
-                alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+                setAlarm()
             } else {
                 alarmSwitch.setBackgroundResource(R.drawable.ic_alarm_off_gray_48dp)
                 startRow.visibility = View.GONE
@@ -124,7 +130,7 @@ class MainActivity : Activity() {
                 preferences.startMin = i2
                 startTime.text =
                     String.format("%02d:%02d", preferences.startHour, preferences.startMin)
-                alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+                setAlarm()
             }, preferences.startHour, preferences.startMin, true).show()
         }
         endRow.setOnClickListener {
@@ -132,8 +138,26 @@ class MainActivity : Activity() {
                 preferences.endHour = i
                 preferences.endMin = i2
                 endTime.text = String.format("%02d:%02d", preferences.endHour, preferences.endMin)
-                alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+                setAlarm()
             }, preferences.endHour, preferences.endMin, true).show()
+        }
+    }
+
+    private fun setAlarm() {
+        when {
+            Build.VERSION.SDK_INT >= 23 -> {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    getRandomTime(),
+                    pendingIntent
+                )
+            }
+            Build.VERSION.SDK_INT >= 19 -> {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+            }
+            else -> {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, getRandomTime(), pendingIntent)
+            }
         }
     }
 

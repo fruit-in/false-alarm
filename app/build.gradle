@@ -10,8 +10,8 @@ android {
         applicationId "com.example.falsealarm"
         minSdkVersion 17
         targetSdkVersion 30
-        versionCode 4
-        versionName "1.0"
+        versionCode 5
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
